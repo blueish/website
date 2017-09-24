@@ -1,5 +1,5 @@
 .website-root{
-  text-align: center;
+  padding: 32px;
 }
 
 .splash-container {
@@ -7,7 +7,12 @@
     justify-content: center;
 }
 
-.resume {
 
+.resume-item__wrapper {
+    padding: 16px;
+}
 
+.resume-details {
+    padding-top: 8px;
+    max-width: 500px;
 }
