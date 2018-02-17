@@ -35,3 +35,7 @@ h1, h2, h3{
     padding-top: 8px;
     max-width: 500px;
 }
+
+hr {
+    margin-top: 2em;
+}
