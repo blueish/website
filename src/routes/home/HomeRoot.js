@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
-import ResumeContainer from './ResumeContainer';
+import ResumeContainer from '../../ResumeContainer';
 import { Provider } from 'react-redux';
 import { Link } from "react-router-dom";
 
-import { makeMyStore } from './redux/createStore';
-import * as constants from './redux/AppConstants';
+import { makeHomeStore } from './redux/createStore';
+import * as constants from './redux/HomeConstants';
+import './Home.css';
 
-const store = makeMyStore();
+const store = makeHomeStore();
+
 
 class HomeRoot extends Component {
     componentWillMount() {

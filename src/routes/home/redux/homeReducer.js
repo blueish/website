@@ -1,4 +1,4 @@
-import * as constants from './AppConstants';
+import * as constants from './HomeConstants';
 
 export default function(store = constants.initialState, action) {
     switch (action.type) {

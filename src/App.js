@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import {Route, BrowserRouter, Link} from 'react-router-dom';
+import { Route, BrowserRouter } from 'react-router-dom';
 
-import HomeRoot from './HomeRoot';
-import MatchingRoot from './MatchingRoot';
-
-
-import './App.css';
+import HomeRoot from './routes/home/HomeRoot';
+import MatchingRoot from './routes/matching/MatchingRoot';
 
 class App extends Component {
     render() {

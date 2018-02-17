@@ -1,9 +1,9 @@
 import { createStore } from 'redux';
-import myReducer from './reducer';
+import homeReducer from './homeReducer';
 
-export const makeMyStore = () => {
+export const makeHomeStore = () => {
     return createStore(
-        myReducer,
+        homeReducer,
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
     );
 };
