@@ -1,0 +1,25 @@
+/* Top Level declarations, shouldn't need much */
+body {
+    margin: 40px auto;
+    max-width: 1200px;
+    line-height: 1.6;
+    font-size: 18px;
+    color:#444;
+    background-color: #f2f2f2;
+    padding:0 10px;
+}
+
+h1, h2, h3{
+    line-height:1.4
+}
+
+.nav-bar__wrapper {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: black solid 1px;
+    margin-bottom: 1em;
+}
+
+.nav-bar__wrapper a {
+    padding: 1em;
+}

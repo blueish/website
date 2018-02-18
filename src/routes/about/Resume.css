@@ -1,0 +1,24 @@
+
+
+.website-root{
+  padding: 32px;
+}
+
+.splash-container {
+    display: flex;
+    justify-content: center;
+}
+
+.resume-item__wrapper {
+    padding: 16px;
+}
+
+.resume-date {
+    text-align: right;
+}
+
+.resume-details {
+    padding-top: 8px;
+    max-width: 500px;
+}
+
