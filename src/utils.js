@@ -3,12 +3,36 @@
 const SOURCE_SINK = 'source_sink';
 const DEST_SINK = 'dest_sink';
 
-// TODO: change this all to be adjacency matrix
-export function createGraph(names, previousPairs) {
+export function createGraph(names, previousPairs, maxWeek) {
     // the matrix must have size for each of the names left and right partite node, and one source and one sink node
-    const matrixSize = (names * 2) + 2;
+    const matrixSize = (names.length * 2) + 2;
 
     const graph = Array(matrixSize).fill(Array(matrixSize).fill(0));
+
+    // console.log(graph);
+
+
+    // We'll represent the adjacency matrix as the source node, followed by each name's left representation, right
+    // representation, and then the sink node. E.g. if N=2, [ source, n1_left, n1_right, n2_left, n2_right, sink ]
+    // This has the handy property that any odd node index is the left, an even node index is the right, etc.
+
+    // we'll make a name map to make it easier to access any given name
+    const nameMap = {};
+    let idx = 1;
+    for (let i = 0; i < names.length; i++) {
+        const name = names[i];
+
+        nameMap[name] = idx;
+        idx += 2;
+    }
+
+    for (const pair of previousPairs) {
+        console.log(pair);
+
+
+    }
+
+
 
     /*
     // Generate a bipartite graph by taking all of the names, making nodes marked with ${name}_left or ${name}_right
