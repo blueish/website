@@ -13,6 +13,14 @@ h1, h2, h3{
     line-height:1.4
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
 .nav-bar__wrapper {
     display: flex;
     justify-content: space-between;

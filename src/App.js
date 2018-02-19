@@ -6,6 +6,8 @@ import MatchingRoot from './routes/matching/MatchingRoot';
 import NavBar from "./NavBar";
 import HomeRoot from "./routes/home/HomeRoot";
 
+import './Global.css';
+
 class App extends Component {
     render() {
         return (

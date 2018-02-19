@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ResumeContainer from '../../ResumeContainer';
+import ResumeContainer from './ResumeContainer';
 import { Provider } from 'react-redux';
 
 import { makeHomeStore } from './redux/createStore';
@@ -33,14 +33,9 @@ class HomeRoot extends Component {
         return (
             <Provider store={store}>
                 <div className="website-root">
-                    <div className="splash-container">
-                        <h2>Hi, I'm Sam Chow</h2>
-                    </div>
                     <ResumeContainer />
                     <h2>Other</h2>
                     <div>If you want to contact me, email "me" at this domain</div>
-
-                    <hr />
                 </div>
             </Provider>
         );
