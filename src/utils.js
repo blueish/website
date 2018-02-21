@@ -17,7 +17,12 @@ export function createGraph(names, previousPairMap, maxWeek) {
     const matrixSize = (names.length * 2) + 2;
     const UNPAIRED_EDGE_WEIGHT = maxWeek + 1; // TODO: validate this choice vs 2x maxWeek, etc.
 
-    const graph = Array(matrixSize).fill(Array(matrixSize).fill(0));
+    // Have to fill with 0's and then map, otherwise array will hold same reference to 1 array
+    const graph = Array(matrixSize)
+        .fill(0)
+        .map(() =>
+            Array(matrixSize).fill(0)
+        );
 
 
 
@@ -25,7 +30,7 @@ export function createGraph(names, previousPairMap, maxWeek) {
     // representation, and then the sink node. E.g. if N=2, [ source, n1_left, n1_right, n2_left, n2_right, sink ]
     // This has the handy property that any odd node index is the left, an even node index is the right, etc.
 
-    // we'll make a name map to make it easier to access any given name, have to iterate through names,
+    // we'll make a name map to make it easier to access any given name's idx, and vice versa, have to iterate through names,
     // but constantly update the matrix idx since we're skipping
     const nameMap = {};
     let matrixIdx = 1;
@@ -33,12 +38,14 @@ export function createGraph(names, previousPairMap, maxWeek) {
         const name = names[nameIdx];
 
         nameMap[name] = matrixIdx;
+        nameMap[matrixIdx] = name;
         matrixIdx += 2;
     }
 
 
     // TODO: we might want an adjacency list instead, since this graph is actually pretty sparse with the left/right nodes
     // and those right nodes are almost all empty.
+    // Let's finish this implementation and then slot in the adjacency list implementation later on
 
     // We can populate the source node by making it point to every left node (odd index) until the last one, skip it
     // because we don't have an edge from source to sink
@@ -50,17 +57,37 @@ export function createGraph(names, previousPairMap, maxWeek) {
     // Now populate the rest of the matrix using the previous pairs, inverting them (since we are aiming for maximum flow,
     // and we want to avoid pairings that have happened recently (older/higher number is 'better')
     // and if there doesn't exist an edge yet, we make that weight UNPAIRED_EDGE_WEIGHT (if it's not the same node idx)
+    debugger;
     for (let sourceNodeIdx = 1; sourceNodeIdx < matrixSize; sourceNodeIdx++) {
         if (sourceNodeIdx % 2 === 1) {
-            // this is a left node, we'll check the map to look at right listings
-            for (let targetNodeIdx = 1; targetNodeIdx < matrixSize; targetNodeIdx++) {
-                // if (previousPairMap[`${nameMap}`])
+            // this is a left node, we'll check the names to find a mapping to look at right listings
+            for (let i = 0; i < names.length; i++) {
+                const name = names[i];
+                const targetNodeIdx = nameMap[name];
+
+                // skip if same node (no self-edges)
+                if (targetNodeIdx !== sourceNodeIdx) {
+                    const sourceName = nameMap[sourceNodeIdx];
+                    const [first, second] = orderedPair(name, sourceName);
+
+
+                    let edgeWeight = previousPairMap[`${first}_${second}`];
+                    if (!edgeWeight) {
+                        edgeWeight = UNPAIRED_EDGE_WEIGHT;
+                    }
+                    debugger;
+
+                    graph[sourceNodeIdx][targetNodeIdx] = edgeWeight
+                }
             }
         } else {
             // it's a right node, the only direction it points is the sink
             graph[sourceNodeIdx][matrixSize - 1] = Infinity;
         }
     }
+
+    debugger;
+    console.log(graph);
 
 
 
@@ -162,5 +189,8 @@ export class Graph {
 }
 
 const min = (a, b) => a < b ? a : b;
+const orderedPair = (a, b) => a < b
+    ? [a, b]
+    : [b, a];
 
 
