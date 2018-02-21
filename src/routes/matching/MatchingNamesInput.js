@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ParagraphText from "./ParagraphText";
-import {createGraph} from "../../utils";
+import {createGraph, Graph} from "../../utils";
 
 
 class MatchingNamesInput extends Component {
@@ -24,15 +24,13 @@ class MatchingNamesInput extends Component {
         // Split the previous pairings into an object: { pair: [name1, name2], week: num }
         // Assume they are split by lines into comma delimited pairs and week: name1, name2, num
         rawPreviousPairings.split('\n').map(str => {
-            const delimited = str.split(',');
+            const delimited = str.split(',')
+                .map(s => s.trim().toLowerCase());
 
             // Sorts the names so alphabetically the first will be in first
             let [first, second] = delimited[0] < delimited[1]
                 ? [delimited[0], delimited[1]]
                 : [delimited[1], delimited[0]];
-
-            first = first.trim().toLowerCase();
-            second = second.trim().toLowerCase();
 
             const weekNumber = Number(delimited[2]);
             pairingsMap[`${first}_${second}`] = weekNumber;
@@ -41,17 +39,12 @@ class MatchingNamesInput extends Component {
                 maxWeek = weekNumber;
             }
 
-            /*
-            previousPairings.push([
-                first.trim().toLowerCase(),
-                second.trim().toLowerCase(),
-                weekNumber
-            ]);
-            */
         });
 
         const graph = createGraph(names, pairingsMap, maxWeek);
-        // console.log(graph);
+
+        console.log(graph.EdmondsKarp(0, (names.length + 1) * 2));
+
     }
 
     render() {

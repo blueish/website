@@ -25,13 +25,13 @@ export function createGraph(names, previousPairMap, maxWeek) {
         );
 
 
-
     // We'll represent the adjacency matrix as the source node, followed by each name's left representation, right
     // representation, and then the sink node. E.g. if N=2, [ source, n1_left, n1_right, n2_left, n2_right, sink ]
     // This has the handy property that any odd node index is the left, an even node index is the right, etc.
 
     // we'll make a name map to make it easier to access any given name's idx, and vice versa, have to iterate through names,
     // but constantly update the matrix idx since we're skipping
+    // (this can probably be removed when we move to an adjacency list)
     const nameMap = {};
     let matrixIdx = 1;
     for (let nameIdx = 0; nameIdx < names.length; nameIdx++) {
@@ -57,8 +57,9 @@ export function createGraph(names, previousPairMap, maxWeek) {
     // Now populate the rest of the matrix using the previous pairs, inverting them (since we are aiming for maximum flow,
     // and we want to avoid pairings that have happened recently (older/higher number is 'better')
     // and if there doesn't exist an edge yet, we make that weight UNPAIRED_EDGE_WEIGHT (if it's not the same node idx)
-    debugger;
-    for (let sourceNodeIdx = 1; sourceNodeIdx < matrixSize; sourceNodeIdx++) {
+
+    // ignore the first and last nodes
+    for (let sourceNodeIdx = 1; sourceNodeIdx < matrixSize - 1; sourceNodeIdx++) {
         if (sourceNodeIdx % 2 === 1) {
             // this is a left node, we'll check the names to find a mapping to look at right listings
             for (let i = 0; i < names.length; i++) {
@@ -70,12 +71,14 @@ export function createGraph(names, previousPairMap, maxWeek) {
                     const sourceName = nameMap[sourceNodeIdx];
                     const [first, second] = orderedPair(name, sourceName);
 
-
                     let edgeWeight = previousPairMap[`${first}_${second}`];
+
                     if (!edgeWeight) {
                         edgeWeight = UNPAIRED_EDGE_WEIGHT;
+                    } else {
+                        // Invert the edge weight
+                        edgeWeight = maxWeek - edgeWeight;
                     }
-                    debugger;
 
                     graph[sourceNodeIdx][targetNodeIdx] = edgeWeight
                 }
@@ -86,40 +89,7 @@ export function createGraph(names, previousPairMap, maxWeek) {
         }
     }
 
-    debugger;
-    console.log(graph);
-
-
-
-    /*
-    // Generate a bipartite graph by taking all of the names, making nodes marked with ${name}_left or ${name}_right
-    // All of the 'left' nodes will have an incoming edge from the source sink,
-    // and all the 'right' nodes will have an outgoing edge to the destination sink
-    let nodes = [];
-
-    for (let i = 0; i < names.length; i++) {
-        const name = names[i];
-
-        nodes.push({ name: `${name}_left`, edges: [] });
-        nodes.push({ name: `${name}_right`, edges: [DEST_SINK] });
-        nodes[`${name}_left`] = [];
-        nodes[`${name}_right`] = [DEST_SINK];
-    }
-
-
-    // make all of the directed edges by assigning all of the
-    // const leftNodes = nodes.entries.filter(node => node[0].contains('_left'));
-    // const rightNodes = nodes.entries.filter(node => node[0].contains('_right'));
-
-    const sourceSinkNode = { name: SOURCE_SINK, edges: [] };
-    const destSinkNode = { name: DEST_SINK, edges: [] };
-
-    nodes.map(node => {
-        if (node.name.contains('_left')) {
-            sourceSinkNode.edges.push(node.name);
-        }
-    })
-    */
+    return new Graph(graph);
 }
 
 
@@ -142,7 +112,7 @@ export class Graph {
 
 
         while (queue.length > 0) {
-            const u = queue.splice(0, 1);
+            const u = queue.splice(0, 1)[0];
 
             for (let idx = 0; idx < this.ROW; idx++) {
                 const val = this.graph[u][idx];
@@ -162,9 +132,11 @@ export class Graph {
         const parent = Array(this.ROW).fill(-1);
 
         let maxFlow = 0;
+        debugger;
 
         // Keep iterating while there's a valid path from source to sink
         while (this.BFS(source, sink, parent)) {
+            debugger;
             let pathFlow = Infinity;
             let s = sink;
 
