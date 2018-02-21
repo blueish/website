@@ -37,9 +37,12 @@ export function createGraph(names, previousPairMap, maxWeek) {
     }
 
 
+    // TODO: we might want an adjacency list instead, since this graph is actually pretty sparse with the left/right nodes
+    // and those right nodes are almost all empty.
 
-    // We can populate the source node by making it point to every left node (odd index) until the last one
-    for (let i = 1; i < matrixSize; i += 2) {
+    // We can populate the source node by making it point to every left node (odd index) until the last one, skip it
+    // because we don't have an edge from source to sink
+    for (let i = 1; i < matrixSize - 1; i += 2) {
         graph[0][i] = Infinity;
     }
 
@@ -48,12 +51,14 @@ export function createGraph(names, previousPairMap, maxWeek) {
     // and we want to avoid pairings that have happened recently (older/higher number is 'better')
     // and if there doesn't exist an edge yet, we make that weight UNPAIRED_EDGE_WEIGHT (if it's not the same node idx)
     for (let sourceNodeIdx = 1; sourceNodeIdx < matrixSize; sourceNodeIdx++) {
-        for (let targetNodeIdx = 1; targetNodeIdx < matrixSize; targetNodeIdx++) {
-            if (sourceNodeIdx % 2 === 1) {
-                // this is a left node, we'll check the map to look at right listings
-                
-
+        if (sourceNodeIdx % 2 === 1) {
+            // this is a left node, we'll check the map to look at right listings
+            for (let targetNodeIdx = 1; targetNodeIdx < matrixSize; targetNodeIdx++) {
+                // if (previousPairMap[`${nameMap}`])
             }
+        } else {
+            // it's a right node, the only direction it points is the sink
+            graph[sourceNodeIdx][matrixSize - 1] = Infinity;
         }
     }
 
