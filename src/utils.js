@@ -1,35 +1,60 @@
 
 
-const SOURCE_SINK = 'source_sink';
-const DEST_SINK = 'dest_sink';
-
-export function createGraph(names, previousPairs, maxWeek) {
+/** This function creates the adjacency matrix for a weighted, directed bipartite graph with a source node and sink node
+ * for reduction to the Network Bandwidth Problem.
+ *
+ * A few assumptions this function makes:
+ * 1) names are an array of lowercase, unique strings
+ * 2) previousPairMap is an object with keys representing 2 names, in order alphabetically, with the week number
+ *      that that pair was matched on (lower weeks is further in the past). both names must exist in the names array,
+ *      or that matching will be skipped.
+ * @param names [String]
+ * @param previousPairMap { String -> int}
+ * @param maxWeek
+ */
+export function createGraph(names, previousPairMap, maxWeek) {
     // the matrix must have size for each of the names left and right partite node, and one source and one sink node
     const matrixSize = (names.length * 2) + 2;
+    const UNPAIRED_EDGE_WEIGHT = maxWeek + 1; // TODO: validate this choice vs 2x maxWeek, etc.
 
     const graph = Array(matrixSize).fill(Array(matrixSize).fill(0));
 
-    // console.log(graph);
 
 
     // We'll represent the adjacency matrix as the source node, followed by each name's left representation, right
     // representation, and then the sink node. E.g. if N=2, [ source, n1_left, n1_right, n2_left, n2_right, sink ]
     // This has the handy property that any odd node index is the left, an even node index is the right, etc.
 
-    // we'll make a name map to make it easier to access any given name
+    // we'll make a name map to make it easier to access any given name, have to iterate through names,
+    // but constantly update the matrix idx since we're skipping
     const nameMap = {};
-    let idx = 1;
-    for (let i = 0; i < names.length; i++) {
-        const name = names[i];
+    let matrixIdx = 1;
+    for (let nameIdx = 0; nameIdx < names.length; nameIdx++) {
+        const name = names[nameIdx];
 
-        nameMap[name] = idx;
-        idx += 2;
+        nameMap[name] = matrixIdx;
+        matrixIdx += 2;
     }
 
-    for (const pair of previousPairs) {
-        console.log(pair);
 
 
+    // We can populate the source node by making it point to every left node (odd index) until the last one
+    for (let i = 1; i < matrixSize; i += 2) {
+        graph[0][i] = Infinity;
+    }
+
+    // We have to go through the entire matrix to populate the edges, which is n^2, but I don't think there's a better way
+    // Now populate the rest of the matrix using the previous pairs, inverting them (since we are aiming for maximum flow,
+    // and we want to avoid pairings that have happened recently (older/higher number is 'better')
+    // and if there doesn't exist an edge yet, we make that weight UNPAIRED_EDGE_WEIGHT (if it's not the same node idx)
+    for (let sourceNodeIdx = 1; sourceNodeIdx < matrixSize; sourceNodeIdx++) {
+        for (let targetNodeIdx = 1; targetNodeIdx < matrixSize; targetNodeIdx++) {
+            if (sourceNodeIdx % 2 === 1) {
+                // this is a left node, we'll check the map to look at right listings
+                
+
+            }
+        }
     }
 
 

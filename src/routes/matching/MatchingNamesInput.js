@@ -18,7 +18,7 @@ class MatchingNamesInput extends Component {
 
 
         // Make a pairing map populated with an empty array for each
-        const previousPairings = [];
+        const pairingsMap = {};
         let maxWeek = 0;
 
         // Split the previous pairings into an object: { pair: [name1, name2], week: num }
@@ -27,24 +27,30 @@ class MatchingNamesInput extends Component {
             const delimited = str.split(',');
 
             // Sorts the names so alphabetically the first will be in first
-            const [first, second] = delimited[0] < delimited[1]
+            let [first, second] = delimited[0] < delimited[1]
                 ? [delimited[0], delimited[1]]
                 : [delimited[1], delimited[0]];
 
+            first = first.trim().toLowerCase();
+            second = second.trim().toLowerCase();
+
             const weekNumber = Number(delimited[2]);
+            pairingsMap[`${first}_${second}`] = weekNumber;
 
             if (weekNumber > maxWeek) {
                 maxWeek = weekNumber;
             }
 
+            /*
             previousPairings.push([
                 first.trim().toLowerCase(),
                 second.trim().toLowerCase(),
                 weekNumber
             ]);
+            */
         });
 
-        const graph = createGraph(names, previousPairings, maxWeek);
+        const graph = createGraph(names, pairingsMap, maxWeek);
         // console.log(graph);
     }
 
