@@ -9,8 +9,8 @@ class App extends Component {
                 <div className="splash-container">
                     <h2>Hi, I'm Sam Chow</h2>
                 </div>
-                <Resume />
-                <h2>Other</h2>
+                {/*<Resume />*/}
+                {/*<h2>Other</h2>*/}
                 <div>If you want to contact me, email "me" at this domain</div>
             </div>
         );
