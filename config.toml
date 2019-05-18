@@ -1,0 +1,4 @@
+baseURL = "https://samc.how/"
+languageCode = "en-us"
+title = "Sam Chow"
+theme = "zozo"
