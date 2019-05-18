@@ -2,3 +2,50 @@ baseURL = "https://samc.how/"
 languageCode = "en-us"
 title = "Sam Chow"
 theme = "zozo"
+
+summaryLength = 100
+paginate = 4                         # shows the number of articles
+
+[author]                             # essential
+  name = "Sam"
+
+[[menu.main]]                        # config your menu  # 配置菜单
+  name = "main"
+  weight = 10
+  identifier = "home"
+  url = "/"
+[[menu.main]]
+  name = "archive"
+  weight = 20
+  identifier = "archive"
+  url = "/posts/"
+[[menu.main]]
+  name = "tags"
+  weight = 30
+  identifier = "tags"
+  url = "/tags/"
+[[menu.main]]
+  name = "about"
+  weight = 40
+  identifier = "about"
+  url = "/about/"
+
+[params]
+  customCSS = ["styles.css"]
+  keywords = []                                  # site's keywords
+  description = "Website for Sam Chow"                        # site's description
+  enableMathJax = false                                                 # enable mathjax
+  enableSummary = true                                                 # display the article summary
+  
+# Valine.
+# You can get your appid and appkey from https://leancloud.cn
+# more info please open https://valine.js.org
+[params.valine]
+  enable = false
+  appId = ""
+  appKey = ""
+  placeholder = " "
+  visitor = true
+
+[social]
+  github = "https://github.com/blueish/"
